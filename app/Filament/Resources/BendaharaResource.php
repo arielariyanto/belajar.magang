@@ -19,7 +19,7 @@ class BendaharaResource extends Resource
 {
     protected static ?string $model = Bendahara::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Data Bendahara';
     protected static ?string $pluralModelLabel = 'Bendahara';
     protected static ?string $navigationGroup = 'Manajemen Kas';
