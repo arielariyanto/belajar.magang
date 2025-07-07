@@ -45,7 +45,7 @@ class SiswaResource extends Resource
                 ])
                 ->searchable(),
 
-            Forms\Components\Select::make('jurusan')
+            Forms\Components\Select::make('jurusan.nama_jurusan')
                 ->label('Jurusan')
                 ->required()
                 ->options([

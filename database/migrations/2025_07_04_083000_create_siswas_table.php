@@ -16,7 +16,7 @@ return new class extends Migration
         $table->string('nisn', 20)->nullable();
         $table->string('nama');
         $table->string('kelas');
-        $table->string('jurusan');
+        $table->string('jurusan_id')->nullable();
         $table->timestamps();
 });
     }
