@@ -111,8 +111,8 @@ class BendaharaResource extends Resource
     {
         return [
             'index' => Pages\ListBendaharas::route('/'),
-            'create' => Pages\CreateBendahara::route('/create'),
-            'edit' => Pages\EditBendahara::route('/{record}/edit'),
+            // 'create' => Pages\CreateBendahara::route('/create'),
+            // 'edit' => Pages\EditBendahara::route('/{record}/edit'),
         ];
     }
 }
