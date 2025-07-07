@@ -13,11 +13,12 @@ class Bendahara extends Model
         'nama_bendahara', 
         'kelas',
         'siswa_id',
-        'jumlah'];
+        'jumlah'
+    ];
 
-       public function siswas()
-{
-    return $this->belongsTo(Siswa::class);
+    // ✅ GANTI ini ↓
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
 }
-}
-

@@ -40,18 +40,18 @@ class BendaharaResource extends Resource
                     ->searchable(),
 
                 Forms\Components\Section::make('Input Kas Siswa')
-                    ->description('Pilih siswa dan masukkan jumlah kas yang dibayar.')
+                    ->description('Pilih siswa berdasarkan NISN dan lihat nama otomatis.')
                     ->schema([
                         Forms\Components\Select::make('siswa_id')
-                            ->label('Pilih Siswa (berdasarkan NISN)')
-                            ->options(Siswa::all()->pluck('label', 'id')) // label = accessor di model
+                            ->label('Pilih Siswa (NISN)')
+                            ->options(Siswa::all()->pluck('label', 'id')) // gunakan accessor
                             ->searchable()
                             ->required()
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $siswa = Siswa::find($state);
                                 if ($siswa) {
-                                    $set('nama_siswa', $siswa->nama); // gunakan 'nama' bukan 'nama_siswa'
+                                    $set('nama_siswa', $siswa->nama);
                                 }
                             }),
 
@@ -59,10 +59,7 @@ class BendaharaResource extends Resource
                             ->label('Nama Siswa')
                             ->disabled()
                             ->dehydrated(false)
-                            ->default(function (callable $get) {
-                                $siswa = Siswa::find($get('siswa_id'));
-                                return $siswa?->nama ?? '';
-                            }),
+                            ->default(fn (callable $get) => Siswa::find($get('siswa_id'))?->nama),
 
                         Forms\Components\TextInput::make('jumlah')
                             ->label('Jumlah Kas Dibayar')
@@ -76,8 +73,9 @@ class BendaharaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_bendahara')->label('Nama'),
+                Tables\Columns\TextColumn::make('nama_bendahara')->label('Nama Bendahara'),
                 Tables\Columns\TextColumn::make('kelas')->label('Kelas'),
+                Tables\Columns\TextColumn::make('siswa.nisn')->label('NISN Siswa'),
                 Tables\Columns\TextColumn::make('siswa.nama')->label('Nama Siswa'),
                 Tables\Columns\TextColumn::make('jumlah')->label('Jumlah'),
                 Tables\Columns\TextColumn::make('created_at')

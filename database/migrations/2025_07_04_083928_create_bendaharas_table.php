@@ -10,16 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('bendaharas', function (Blueprint $table) {
-        $table->id();
-        $table->string('nama_bendahara');
-        $table->string('kelas');
-        $table->unsignedBigInteger('siswa_id'); // foreign key ke siswa
-        $table->integer('jumlah');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('bendaharas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_bendahara');
+            $table->string('kelas');
+            $table->foreignId('siswa_id')->constrained()->onDelete('cascade');
+            $table->integer('jumlah');
+            $table->timestamps();
+        });
+    }
+
 
 
     /**
