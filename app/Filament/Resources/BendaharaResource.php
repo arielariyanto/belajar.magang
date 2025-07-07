@@ -86,15 +86,19 @@ class BendaharaResource extends Resource
                     ->label('Dibuat Pada')
                     ->dateTime('d M Y H:i'),
 
-                Tables\Columns\TextColumn::make('total_kas')
-                    ->label('💰 Total Kas')
-                    ->getStateUsing(fn () => 'Rp ' . number_format(Bendahara::sum('jumlah'), 0, ',', '.'))
-                    ->sortable(false)
-                    ->searchable(false)
-                    ->extraAttributes(['class' => 'font-bold text-primary-700'])
+                Tables\Columns\TextColumn::make('sisa_kas')
+                    ->label('💰 Sisa Kas Saat Ini')
+                    ->getStateUsing(function () {
+                        $pemasukan = \App\Models\Bendahara::sum('jumlah');
+                        $pengeluaran = \App\Models\Pengeluaran::sum('jumlah');
+                        return 'Rp ' . number_format($pemasukan - $pengeluaran, 0, ',', '.');
+                    })
+                    ->columnSpanFull()
+                    ->extraAttributes(['class' => 'font-bold text-danger-700'])
                     ->alignRight()
-                    ->columnSpanFull(),
-            ])
+                    ->visible(fn () => true),
+                ])
+
             ->filters([
                 Filter::make('nama_siswa')
                     ->form([
