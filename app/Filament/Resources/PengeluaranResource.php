@@ -83,8 +83,8 @@ class PengeluaranResource extends Resource
     {
         return [
             'index' => Pages\ListPengeluarans::route('/'),
-            'create' => Pages\CreatePengeluaran::route('/create'),
-            'edit' => Pages\EditPengeluaran::route('/{record}/edit'),
+            // 'create' => Pages\CreatePengeluaran::route('/create'),
+            // 'edit' => Pages\EditPengeluaran::route('/{record}/edit'),
         ];
     }
 }
