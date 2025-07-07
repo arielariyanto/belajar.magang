@@ -15,8 +15,8 @@ class Pengeluaran extends Model
     ];
 
     // Relasi ke User (bendahara)
-    public function user()
+    public function bendahara()
     {
-        return $this->belongsTo(\App\Models\Bendahara::class);    
+        return $this->belongsTo(\App\Models\Bendahara::class);
     }
 }
