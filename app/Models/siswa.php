@@ -4,7 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class siswa extends Model
+class Siswa extends Model // ✅ Awalan huruf besar!
 {
-    protected $fillable = ['nama', 'kelas', 'jurusan'];
+    protected $table = 'siswas'; // ✅ Nama tabel sesuai migration
+
+    protected $fillable = ['nisn', 'nama', 'kelas', 'jurusan'];
+
+    public function getLabelAttribute()
+    {
+        return "{$this->nisn} - {$this->nama}";
+    }
 }

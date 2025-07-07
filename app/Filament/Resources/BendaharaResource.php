@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BendaharaResource\Pages;
-use App\Filament\Resources\BendaharaResource\RelationManagers;
 use App\Models\Bendahara;
+use App\Models\Siswa;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BendaharaResource extends Resource
 {
@@ -32,14 +30,45 @@ class BendaharaResource extends Resource
                     ->maxLength(255),
 
                 Forms\Components\Select::make('kelas')
-                ->label('Kelas')
-                ->required()
-                ->options([
-                    'X' => 'X',
-                    'XI' => 'XI',
-                    'XII' => 'XII',
-                ])
-                ->searchable(),
+                    ->label('Kelas')
+                    ->required()
+                    ->options([
+                        'X' => 'X',
+                        'XI' => 'XI',
+                        'XII' => 'XII',
+                    ])
+                    ->searchable(),
+
+                Forms\Components\Section::make('Input Kas Siswa')
+                    ->description('Pilih siswa dan masukkan jumlah kas yang dibayar.')
+                    ->schema([
+                        Forms\Components\Select::make('siswa_id')
+                            ->label('Pilih Siswa (berdasarkan NISN)')
+                            ->options(Siswa::all()->pluck('label', 'id')) // label = accessor di model
+                            ->searchable()
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $siswa = Siswa::find($state);
+                                if ($siswa) {
+                                    $set('nama_siswa', $siswa->nama); // gunakan 'nama' bukan 'nama_siswa'
+                                }
+                            }),
+
+                        Forms\Components\TextInput::make('nama_siswa')
+                            ->label('Nama Siswa')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->default(function (callable $get) {
+                                $siswa = Siswa::find($get('siswa_id'));
+                                return $siswa?->nama ?? '';
+                            }),
+
+                        Forms\Components\TextInput::make('jumlah')
+                            ->label('Jumlah Kas Dibayar')
+                            ->numeric()
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -49,12 +78,11 @@ class BendaharaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama_bendahara')->label('Nama'),
                 Tables\Columns\TextColumn::make('kelas')->label('Kelas'),
+                Tables\Columns\TextColumn::make('siswa.nama')->label('Nama Siswa'),
+                Tables\Columns\TextColumn::make('jumlah')->label('Jumlah'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d M Y H:i'),
-            ])
-            ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -69,9 +97,7 @@ class BendaharaResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

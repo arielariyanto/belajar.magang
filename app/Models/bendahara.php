@@ -9,5 +9,15 @@ class Bendahara extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama_bendahara', 'kelas'];
+    protected $fillable = [
+        'nama_bendahara', 
+        'kelas',
+        'siswa_id',
+        'jumlah'];
+
+       public function siswas()
+{
+    return $this->belongsTo(Siswa::class);
 }
+}
+
