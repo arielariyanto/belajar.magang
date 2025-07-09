@@ -45,51 +45,59 @@ class SiswaResource extends Resource
                 ])
                 ->searchable(),
 
-            Forms\Components\Select::make('jurusan.nama_jurusan')
+            Forms\Components\Select::make('jurusan_id')
                 ->label('Jurusan')
                 ->required()
                 ->options([
-                    'KIMIA ANALIS' => 'KA',
-                    'TEKNIK KIMIA INDUSTRI' => 'TEKKIN',
-                    'TEKNIK KOMPUTER JARINGAN' => 'TKJ',
-                    'REKAYASA PERANGKAT LUNAK' => 'RPL',
-                    'AKUNTANSI' => 'AKL',
+                    'KA' => 'KIMIA ANALIS',
+                    'TEKKIN' => 'TEKNIK KIMIA INDUSTRI',
+                    'TKJ' => 'TEKNIK KOMPUTER JARINGAN',
+                    'RPL' => 'REKAYASA PERANGKAT LUNAK',
+                    'AKL' => 'AKUNTANSI',
                 ])
             ]),
         ]);
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('nisn')
-                    ->label('NISN')
-                    ->sortable()
-                    ->searchable(),
-                    
-                Tables\Columns\TextColumn::make('nama')
-                    ->label('Nama Siswa')
-                    ->searchable()
-                    ->sortable(),
+{
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('nisn')
+                ->label('NISN')
+                ->sortable()
+                ->searchable(),
 
-                Tables\Columns\TextColumn::make('kelas')
-                    ->sortable(),
+            Tables\Columns\TextColumn::make('nama')
+                ->label('Nama Siswa')
+                ->searchable()
+                ->sortable(),
 
-                Tables\Columns\TextColumn::make('jurusan')
-                    ->sortable(),
-            ])
-            ->filters([])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+            Tables\Columns\TextColumn::make('kelas')
+                ->sortable(),
+
+            Tables\Columns\TextColumn::make('jurusan_id')
+                ->label('Jurusan')
+                ->formatStateUsing(fn (string $state) => match ($state) {
+                    'KA' => 'Kimia Analis',
+                    'TEKKIN' => 'Teknik Kimia Industri',
+                    'TKJ' => 'Teknik Komputer Jaringan',
+                    'RPL' => 'Rekayasa Perangkat Lunak',
+                    'AKL' => 'Akuntansi',
+                    default => $state,
+                }),
+        ])
+        ->filters([])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {
